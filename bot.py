@@ -4,7 +4,7 @@ from discord.ext import commands
 
 description = '''TEST DESC'''
 
-TOKEN = 'MTA5MzkzNjE1NzQ1ODQ0ODQ1NA.GzqCEB.j-eeT_YWe4Bhwo6bv2Th_x15sEdlp5VLDgxUog'
+TOKEN = ''
 black_words = ["http://", "https://"]
 
 
