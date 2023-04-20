@@ -40,15 +40,15 @@ def run_discord_bot():
 
       
         for text in black_words:
-              if "Key Role" not in str(message.author.roles) and text in str(message.content.lower()):
-                  print(f"Moderated message > Deleted - Member: {message.author}")
-                  await message.delete()
-                  await message.author.send(f"Hey {message.author.display_name}! 👋")
-                  await message.author.send(
+            if "Key Role" not in str(message.author.roles) and text in str(message.content.lower()):
+                print(f"Moderated message > Deleted - Member: {message.author}")
+                await message.delete()
+                await message.author.send(f"Hey {message.author.display_name}! 👋")
+                await message.author.send(
                         f"I just removed your last message because it is not allowed to entry that tipe of text 😔")
-                  await message.channel.send(
+                await message.channel.send(
                         f"I just deleted {message.author.display_name}'s last message because it is not allowed")
-                  return
+                return
 
          print("Moderated message > Ok")
 
