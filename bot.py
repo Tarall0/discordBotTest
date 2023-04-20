@@ -3,6 +3,7 @@ import responses
 import random
 from discord.ext.commands import Bot, bot
 from discord.ui import View, Button
+import asyncio
 
 TOKEN = 'Token'
 black_words = ["http://", "https://", "www."]
@@ -14,13 +15,6 @@ client = discord.Client(intents=intents)
 
 bot = Bot(command_prefix="!", intents=intents.all())
 
-
-async def send_message(message, user_message, is_private):
-    try:
-        response = responses.handle_response(user_message)
-        await message.author.send(response) if is_private else await message.channel.send(response)
-    except Exception as e:
-        print(e)
 
 
 def run_discord_bot():
@@ -77,18 +71,19 @@ def run_discord_bot():
         if user_message == "!roll":
             roll = str(random.randint(1, 6))
             embed = discord.Embed(title=":game_die: Dice roll",
-                                  description=f"{username} just rolled a dice \r \r Result: **{roll}**")
+                                  description=f"{username} ha appena lanciato un dado \r \r Risultato: **{roll}**")
             await message.channel.send(embed=embed)
 
         if user_message == "!roll 20":
             roll = str(random.randint(1, 20))
             embed = discord.Embed(title=":game_die: Dice roll - D20",
-                                  description=f"{username} just rolled a dice \r \r Result: **{roll}**")
+                                  description=f"{username} ha appena lanciato un dado \r \r Risultato: **{roll}**")
             await message.channel.send(embed=embed)
 
         if user_message == "!help":
-            embed = discord.Embed(title="ℹ️ MushApp",
-                                  description=f"This python bot-application is just here for testing and learning purposes \r \r **Commands available** \r \r **!roll** - Roll a dice (d6) \r **!roll 20** - Roll a dice  (d20) \r **!verify** - Required in order to obtain access to all channels \r **!quote** - Get a random quote \r \r \r `Currently under developement an auto-moderating system for texting channel, try typing 'https://'`")
+            await asyncio.sleep(1)
+            embed = discord.Embed(title=":heart: MushApp",
+                                  description=f"This python bot-application is just here for testing and learning purposes \r \r **Commands available** \r \r **!roll** - Roll a dice (d6) \r **!roll 20** - Roll a dice  (d20) \r **!tod** - Return a Truth or a Dare \r **!quote** - Get a random quote from an array of strings \r \r \r `Currently under developement an auto-moderating system for texting channel, try typing 'https://'`")
             await message.channel.send(embed=embed)
 
         if user_message == "420" or user_message == "!420":
@@ -112,9 +107,16 @@ def run_discord_bot():
             await message.channel.send(random_resp)
             await message.channel.send(random_gif)
 
-        if message.content.lower().startswith("bot"):
-            await message.channel.send(f"Hi, {message.author.mention}")
-            await message.channel.send("What can I do for you? Digit !help")
+        if "bot" in str(message.content.lower()):
+            bot_impulse = [
+                f"Hey {message.author.mention}!",
+                f"Si sono proprio io",
+                f"Dici a me {message.author}?",
+                f"Hai visto gli ultimi aggiornamenti su StonedZone?"
+            ]
+            z = random.randint(0, 3)
+            returned = bot_impulse[z]
+            await message.channel.send(returned)
 
         if user_message[0] == '?':
             user_message = user_message[1:]
@@ -124,3 +126,4 @@ def run_discord_bot():
             await send_message(message, user_message, is_private=False)
 
     client.run(TOKEN)
+
