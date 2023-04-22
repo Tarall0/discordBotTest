@@ -1,19 +1,17 @@
 import discord
 import responses
 import random
-from discord.ext.commands import Bot, bot
 from discord.ui import View, Button
-import asyncio
+
+description = '''TEST DESC'''
 
 TOKEN = 'Token'
 black_words = ["http://", "https://", "www."]
+offensive_words = []
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
-
-bot = Bot(command_prefix="!", intents=intents.all())
-
 
 
 async def send_message(message, user_message, is_private):
@@ -30,14 +28,7 @@ def run_discord_bot():
         print(f'{client.user} is now running as BOT')
 
     @client.event
-    async def on_member_join(self, member, message):
-        guild = member.guild
-        if guild.system_channel is not None:
-            to_send = f'Welcome {member.mention} to {guild.name}!'
-            await message.channel.send(to_send)
-
-    @client.event
-    async def on_message(message, text=None):
+    async def on_message(message):
         # if message.author != client.user
         if message.author == client.user:
             return
@@ -52,9 +43,10 @@ def run_discord_bot():
                 await message.delete()
                 await message.author.send(f"Hey {message.author.display_name}! 👋")
                 await message.author.send(
-                        f"Ho rimosso il tuo ultimo messaggio, perchè contiene del testo non ammesso. 😔")
+                    f"Ho rimosso il tuo ultimo messaggio, perchè contiene del testo non ammesso. 😔")
                 await message.channel.send(
-                        f"Ho appena rimosso il messaggio di {message.author.display_name} perchè pare contenga contenuto non ammesso")
+                    f"Ho appena rimosso il messaggio di {message.author.display_name} perchè pare contenga contenuto "
+                    f"non ammesso")
                 return
 
             print("Moderated message > Ok")
@@ -70,9 +62,6 @@ def run_discord_bot():
                 embed = discord.Embed(title="Obbligo o verità?",
                                       description='Genera un obbligo o una verità, casuale!')
                 await message.channel.send(embed=embed, view=view)
-
-                interaction = await bot.wait_for("button_click", check=lambda i: i.custom_id == "button")
-                await interaction.send(content="Button clicked!")
 
         if user_message == "!roll":
             roll = str(random.randint(1, 6))
@@ -91,7 +80,12 @@ def run_discord_bot():
             button_link = Button(label="stonedzone.it", url="https://stonedzone.it", style=discord.ButtonStyle.url)
             view.add_item(button_link)
             embed = discord.Embed(title=":heart: MushApp",
-                                  description=f"This python bot-application is just here for testing and learning purposes \r \r **Commands available** \r \r **!roll** - Roll a dice (d6) \r **!roll 20** - Roll a dice  (d20) \r **!tod** - Generate a truth or a dare \r **!quote** - Get a random quote from an array\r \r \r `Currently under developement an auto-moderating system for texting channel, try typing 'https://'`")
+                                  description=f"This python bot-application is just here for testing and learning "
+                                              f"purposes \r \r **Commands available** \r \r **!roll** - Roll a dice ("
+                                              f"d6) \r **!roll 20** - Roll a dice  (d20) \r **!tod** - Generate a "
+                                              f"truth or a dare \r **!quote** - Get a random quote from an array\r \r "
+                                              f"\r `Currently under developement an auto-moderating system for "
+                                              f"texting channel, try typing 'https://'`")
             await message.channel.send(embed=embed, view=view)
 
         if message.content.lower().startswith("bot"):
@@ -106,4 +100,6 @@ def run_discord_bot():
             await send_message(message, user_message, is_private=False)
 
     client.run(TOKEN)
+
+
 
